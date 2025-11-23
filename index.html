@@ -134,9 +134,9 @@ let allQuestions=[
   { type:'image', text:'Ai là nhân vật này?', correct:'Thành Cát Tư Hãn', img:'https://upload.wikimedia.org/wikipedia/commons/5/51/Genghis_Khan_statue.jpg' },
 
   { type:'flag', text:'Quốc gia nào có lá cờ này?', correct:'Việt Nam', img:'https://upload.wikimedia.org/wikipedia/vi/2/21/Flag_of_Vietnam.svg' },
-  { type:'flag', text:'Quốc gia nào có lá cờ này-viết bằng tiếng anh?', correct:'Nhật Bản', img:'https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg' },
+  { type:'flag', text:'Quốc gia nào có lá cờ này?', correct:'Nhật Bản', img:'https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg' },
   { type:'flag', text:'Quốc gia nào có lá cờ này?', correct:'Nga', img:'https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg' },
-  { type:'flag', text:'Quốc gia nào có lá cờ này-viết bằng tiếng anh?', correct:'Hàn Quốc', img:'https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg' },
+  { type:'flag', text:'Quốc gia nào có lá cờ này?', correct:'Hàn Quốc', img:'https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg' },
   { type:'flag', text:'Quốc gia nào có lá cờ này?', correct:'Ấn Độ', img:'https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg' },
 
   { type:'capital', text:'Thủ đô của Việt Nam là?', correct:'Hà Nội' },
@@ -177,12 +177,12 @@ function loadQuestion(){
   document.getElementById('answerInput').focus();
 }
 
-// Gửi đáp án (đã sửa)
+// **Hàm submitAnswer() mới**
 function submitAnswer(){
   const userAns=document.getElementById('answerInput').value.trim();
   if(!userAns){ alert("Vui lòng nhập đáp án!"); return; }
 
-  // Đại từ nhân xưng
+  // Lấy đại từ nhân xưng
   const birthYear = new Date(document.getElementById('dob').value).getFullYear();
   const gender = document.getElementById('gender').value;
   let pronoun = '';
@@ -190,40 +190,45 @@ function submitAnswer(){
   else if(birthYear === 2007) pronoun = 'Cậu';
   else pronoun = 'Em';
 
-  // Kiểm tra đúng/sai
+  let previousScore = score;  
   const isCorrect = userAns.toLowerCase() === chosen[index].correct.toLowerCase();
 
-  // Roast vui & buồn
-  const goodRoasts = [
-    "Giỏi quá trời luôn 😎",
-    "Xịn xò thực sự 😆",
-    "Đỉnh kout luôn á 👑",
-    "Trời ơi thông minh dữ vậy 😍",
-    "Chuẩn không cần chỉnh luôn ✨"
-  ];
-
-  const badRoasts = [
-    "Trời ơi… sai mất rồi buồn ghê 😭",
-    "Sai rồi, buồn nhẹ luôn 😢",
-    "Câu này đi hơi lốp nha 😔",
-    "Sai mất tiêu rồi… tiếc ghê 😥",
-    "Ơ… tiêu thật rồi 😟"
-  ];
-
-  let feedback = "";
-
+  // Nếu đúng → +1 điểm
   if(isCorrect){
     score++;
-    const roastVui = goodRoasts[Math.floor(Math.random()*goodRoasts.length)];
-    feedback = roastVui.replace(/Bạn/g, pronoun);
-  } else {
-    const roastBuon = badRoasts[Math.floor(Math.random()*badRoasts.length)];
-    feedback = roastBuon.replace(/Bạn/g, pronoun) + ` (Đáp án đúng: ${chosen[index].correct})`;
   }
 
+  // Roast
+  const roastDung = [
+    "Giỏi quá trời luôn!",
+    "Đỉnh cao trí tuệ rồi đó!",
+    "Ghê vậy trời, thông minh dữ!",
+    "Xuất sắc luôn nhaaa!",
+    "Chuẩn không cần chỉnh!"
+  ];
+
+  const roastSai = [
+    "Sai rồi nè… 😭",
+    "Không được cộng điểm rồi nhaaaa.",
+    "Hí hí… lần này mlem không cứu nổi đâu.",
+    "Lụm trái đắng rồi đó.",
+    "Thua câu này nhẹ nhàng ha…"
+  ];
+
+  // Kiểm tra score có tăng hay không
+  let feedback = "";
+  if(score > previousScore){
+    feedback = roastDung[Math.floor(Math.random()*roastDung.length)];
+  } else {
+    feedback = roastSai[Math.floor(Math.random()*roastSai.length)];
+  }
+
+  feedback = feedback.replace(/Bạn/g, pronoun);
+
   document.getElementById('roast').innerText = feedback;
+
   index++;
-  setTimeout(loadQuestion,1200);
+  setTimeout(loadQuestion, 1200);
 }
 
 // Kết thúc
