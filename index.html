@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cơm nước gì chưa người đẹp</title>
 
-<!-- Google Analytics -->
+<!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-B56CSRG31S"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -18,7 +18,6 @@
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Arial', sans-serif; overflow:hidden; }
 
-/* Intro */
 #intro { position:relative; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
 .tulip-bg { position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ff6b6b" d="M50 20 C60 10, 80 15, 80 30 C80 45, 60 50, 50 60 C40 50, 20 45, 20 30 C20 15, 40 10, 50 20 Z"/><path fill="%23ff8e8e" d="M50 60 L45 80 L55 80 Z"/></svg>'); background-size:200px; background-position:center; z-index:-1; filter:blur(2px); }
 .petals { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2; }
@@ -42,12 +41,10 @@ body { font-family:'Arial', sans-serif; overflow:hidden; }
 .score { margin-top:20px; font-size:20px; color:#ff8e8e; }
 img { max-width:200px; border-radius:10px; margin-bottom:10px; }
 
-/* Result hồng */
 #result { background: linear-gradient(to bottom,#ffb6c1,#ffc0cb); position:relative; overflow:hidden; }
 </style>
 </head>
 <body>
-
 <div id="intro">
   <div class="tulip-bg"></div>
   <div class="petals" id="petals"></div>
@@ -88,7 +85,7 @@ img { max-width:200px; border-radius:10px; margin-bottom:10px; }
 </div>
 
 <script>
-// Cánh hoa rơi
+// Cánh hoa
 function createPetals(containerId){
   const petalsContainer=document.getElementById(containerId);
   const colors=['#ffb6c1','#ffffe0','#add8e6','#dda0dd','#98fb98'];
@@ -111,14 +108,12 @@ createPetals('petals');
 function playMusic(){ const m=document.getElementById('introMusic'); m.volume=0.5; m.play().catch(()=>{}); }
 function toggleMusic(){ const m=document.getElementById('introMusic'); const icon=document.querySelector('.music-icon'); if(m.paused){ m.play(); icon.textContent='🎵'; }else{ m.pause(); icon.textContent='🔇'; } }
 
-// Roast kết thúc
 const endRoasts=[
   "Wow, bạn vừa trải qua 10 câu thử thách thật tuyệt! Bạn đúng là người xinh nhất trên thế gian này!",
   "Có vẻ như bạn đang luyện tập để trở thành quiz master! Cố gắng lên nhé!",
   "Chúc mừng! Đối với tớ bạn đã rất tuyệt rồi!"
 ];
 
-// 30 câu hỏi
 let allQuestions=[
   { type:'order', text:'Sắp xếp để từ sau có nghĩa: c/ọ/n/ồ/l', correct:'lọ cồn' },
   { type:'order', text:'Buổi nhậu sẽ hoàn hảo hơn nếu có cái gì :ó/c/c/á/l/i/ồ/n ', correct:'nồi cá lóc' },
@@ -159,7 +154,6 @@ let allQuestions=[
 
 let chosen=[], index=0, score=0, playerName='';
 
-// Bắt đầu game
 function startGame(){
   const n=document.getElementById('name').value.trim();
   const d=document.getElementById('dob').value.trim();
@@ -174,7 +168,6 @@ function startGame(){
   loadQuestion();
 }
 
-// Hiện câu hỏi
 function loadQuestion(){
   if(index>=chosen.length){ endGame(); return; }
   const q=chosen[index];
@@ -188,12 +181,10 @@ function loadQuestion(){
   document.getElementById('answerInput').focus();
 }
 
-// Gửi đáp án
 function submitAnswer(){
   const userAns=document.getElementById('answerInput').value.trim();
   if(!userAns){ alert("Vui lòng nhập đáp án!"); return; }
 
-  // Đại từ nhân xưng
   const birthYear = new Date(document.getElementById('dob').value).getFullYear();
   const gender = document.getElementById('gender').value;
   let pronoun = '';
@@ -201,8 +192,7 @@ function submitAnswer(){
   else if(birthYear === 2007) pronoun = 'Cậu';
   else pronoun = 'Em';
 
-  const q = chosen[index];
-  const isCorrect = userAns.toLowerCase() === q.correct.toLowerCase();
+  const isCorrect = userAns.toLowerCase() === chosen[index].correct.toLowerCase();
 
   const goodRoasts = [
     "Giỏi quá trời luôn 😎",
@@ -221,22 +211,21 @@ function submitAnswer(){
   ];
 
   let feedback = "";
-
   if(isCorrect){
     score++;
     const roastVui = goodRoasts[Math.floor(Math.random()*goodRoasts.length)];
     feedback = roastVui.replace(/Bạn/g, pronoun);
   } else {
     const roastBuon = badRoasts[Math.floor(Math.random()*badRoasts.length)];
-    feedback = roastBuon.replace(/Bạn/g, pronoun) + ` (Đáp án đúng: ${q.correct})`;
+    feedback = roastBuon.replace(/Bạn/g, pronoun) + ` (Đáp án đúng: ${chosen[index].correct})`;
   }
 
   document.getElementById('roast').innerText = feedback;
   index++;
+
   setTimeout(loadQuestion,1200);
 }
 
-// Kết thúc
 function endGame(){
   document.getElementById('quiz').style.display='none';
   document.getElementById('result').style.display='flex';
@@ -244,7 +233,14 @@ function endGame(){
   const finalRoast=endRoasts.sort(()=>0.5-Math.random()).slice(0,2).join(' ');
   document.getElementById('finalText').innerText=`${playerName}, bạn đúng ${score}/10! ${finalRoast}`;
 
-  // Gửi event lên GA
+  // Gửi dữ liệu điểm lên Google Analytics
   gtag('event', 'quiz_end', {
     'player_name': playerName,
-    '
+    'score': score
+  });
+}
+
+function reload(){ location.reload(); }
+</script>
+</body>
+</html>
