@@ -77,7 +77,7 @@ img { max-width:200px; border-radius:10px; margin-bottom:10px; }
 </div>
 
 <script>
-// Cánh hoa rơi liên tục
+// Cánh hoa rơi
 function createPetals(containerId){
   const petalsContainer=document.getElementById(containerId);
   const colors=['#ffb6c1','#ffffe0','#add8e6','#dda0dd','#98fb98'];
@@ -94,30 +94,20 @@ function createPetals(containerId){
     setTimeout(()=>{ if(p.parentNode) p.parentNode.removeChild(p); },7000);
   },200);
 }
-createPetals('petals'); // intro petals
+createPetals('petals');
 
 // Nhạc
-function playMusic(){ const m=document.getElementById('introMusic'); m.volume=0.5; m.play().catch(()=>console.log('Cần tương tác để phát nhạc')); }
+function playMusic(){ const m=document.getElementById('introMusic'); m.volume=0.5; m.play().catch(()=>{}); }
 function toggleMusic(){ const m=document.getElementById('introMusic'); const icon=document.querySelector('.music-icon'); if(m.paused){ m.play(); icon.textContent='🎵'; }else{ m.pause(); icon.textContent='🔇'; } }
 
-// Roast
-const roasts=[
-  "Ồ, đúng rồi! Bạn thông minh lắm 😎",
-  "Sai rồi! May mà câu sau còn cơ hội ",
-  "Đúng rồi! Bạn như quiz master vậy 😎",
-  "Sai rồi! bạn buồn ngủ rùi à ? 😂",
-  "Chính xác! Bạn giỏi hơn tôi tưởng đấy 😆",
-  "Sai rồi! Hơi tệ, nhưng không sao hết",
-  "Đúng rồi! Bạn sắp thành thánh quiz ",
-  "Sai rồi! Cẩn thận hơn nhé"
-];
+// Roast kết thúc
 const endRoasts=[
-  "Wow, bạn vừa trải qua 10 câu thử thách thật tuyệt !Bạn đúng là người xinh nhất trên thế gian này ",
-  "Có vẻ như bạn đang luyện tập để trở thành quiz master !Cố gắng lên nhé",
-  "Chúc mừng! Đối với tớ bạn đã rất tuyệt rùi"
+  "Wow, bạn vừa trải qua 10 câu thử thách thật tuyệt! Bạn đúng là người xinh nhất trên thế gian này!",
+  "Có vẻ như bạn đang luyện tập để trở thành quiz master! Cố gắng lên nhé!",
+  "Chúc mừng! Đối với tớ bạn đã rất tuyệt rồi!"
 ];
 
-// 30 câu
+// 30 câu hỏi
 let allQuestions=[
   { type:'order', text:'Sắp xếp để từ sau có nghĩa: c/ọ/n/ồ/l', correct:'lọ cồn' },
   { type:'order', text:'Buổi nhậu sẽ hoàn hảo hơn nếu có cái gì :ó/c/c/á/l/i/ồ/n ', correct:'nồi cá lóc' },
@@ -131,11 +121,11 @@ let allQuestions=[
   { type:'idiom', text:'Ăn quả nhớ kẻ  ____', correct:'trồng cây' },
   { type:'idiom', text:'Một cây làm chẳng nên ____', correct:'non' },
 
-  { type:'song', text:'Đoán tên bài hát:Nếu lúc đó em không buông tay … nếu lúc đó anh cho em thấy em luôn là người duy nhất', correct:'Nếu Lúc Đó' },
-  { type:'song', text:'Đoán tên bài hát:Gieo mầm thương ở nơi tâm hồn để hóa một rừng hoa / … Hãy để anh được bên nàng, chăm cho đóa hoa nở muôn ngàn', correct:'Chăm Hoa' },
-  { type:'song', text:'Đoán tên bài hát:Tình yêu chậm trễ đôi khi vài giây / Thì ta sẽ lỡ mất nhau', correct:'Tình Yêu Chậm Trễ' },
-  { type:'song', text:'Đoán tên bài há:Ngày mai em sẽ ra sao? Anh vẫn không thể ngừng nhớ về em.', correct:'Chúng Ta Của Hiện Tại' },
-  { type:'song', text:'Đoán tên bài hát:Anh sẽ là hoa hải đường nở muộn, bên em suốt đời chẳng rời', correct:'Hoa Hải Đường' },
+  { type:'song', text:'Đoán tên bài hát:Nếu lúc đó em không buông tay …', correct:'Nếu Lúc Đó' },
+  { type:'song', text:'Đoán tên bài hát:Gieo mầm thương ở nơi tâm hồn…', correct:'Chăm Hoa' },
+  { type:'song', text:'Đoán tên bài hát:Tình yêu chậm trễ đôi khi vài giây…', correct:'Tình Yêu Chậm Trễ' },
+  { type:'song', text:'Đoán tên bài hát:Ngày mai em sẽ ra sao?…', correct:'Chúng Ta Của Hiện Tại' },
+  { type:'song', text:'Đoán tên bài hát:Anh sẽ là hoa hải đường…', correct:'Hoa Hải Đường' },
 
   { type:'image', text:'Ai là nhân vật này?', correct:'Trấn Thành', img:'https://upload.wikimedia.org/wikipedia/vi/f/fc/Tran_Thanh_2019.jpg' },
   { type:'image', text:'Ai là nhân vật này?', correct:'Bray', img:'https://upload.wikimedia.org/wikipedia/vi/5/5a/Bray_image.jpg' },
@@ -144,7 +134,7 @@ let allQuestions=[
   { type:'image', text:'Ai là nhân vật này?', correct:'Thành Cát Tư Hãn', img:'https://upload.wikimedia.org/wikipedia/commons/5/51/Genghis_Khan_statue.jpg' },
 
   { type:'flag', text:'Quốc gia nào có lá cờ này?', correct:'Việt Nam', img:'https://upload.wikimedia.org/wikipedia/vi/2/21/Flag_of_Vietnam.svg' },
-  { type:'flag', text:'Quốc gia nào có lá cờ này-viết bằngtiếng anh?', correct:'Nhật Bản', img:'https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg' },
+  { type:'flag', text:'Quốc gia nào có lá cờ này-viết bằng tiếng anh?', correct:'Nhật Bản', img:'https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg' },
   { type:'flag', text:'Quốc gia nào có lá cờ này?', correct:'Nga', img:'https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg' },
   { type:'flag', text:'Quốc gia nào có lá cờ này-viết bằng tiếng anh?', correct:'Hàn Quốc', img:'https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg' },
   { type:'flag', text:'Quốc gia nào có lá cờ này?', correct:'Ấn Độ', img:'https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg' },
@@ -158,7 +148,7 @@ let allQuestions=[
 
 let chosen=[], index=0, score=0, playerName='';
 
-// Bắt đầu quiz
+// Bắt đầu game
 function startGame(){
   const n=document.getElementById('name').value.trim();
   const d=document.getElementById('dob').value.trim();
@@ -173,7 +163,7 @@ function startGame(){
   loadQuestion();
 }
 
-// Hiển thị câu hỏi
+// Hiện câu hỏi
 function loadQuestion(){
   if(index>=chosen.length){ endGame(); return; }
   const q=chosen[index];
@@ -187,7 +177,7 @@ function loadQuestion(){
   document.getElementById('answerInput').focus();
 }
 
-// Gửi đáp án
+// Gửi đáp án (đã sửa)
 function submitAnswer(){
   const userAns=document.getElementById('answerInput').value.trim();
   if(!userAns){ alert("Vui lòng nhập đáp án!"); return; }
@@ -200,17 +190,38 @@ function submitAnswer(){
   else if(birthYear === 2007) pronoun = 'Cậu';
   else pronoun = 'Em';
 
-  // Chọn roast ngẫu nhiên
-  const roastText=roasts[Math.floor(Math.random()*roasts.length)];
-  
-  // Thay "Bạn" bằng đại từ nhân xưng
-  let feedback = roastText.replace(/Bạn/g, pronoun) + `, đáp án đúng: ${chosen[index].correct}`;
-  if(userAns.toLowerCase()===chosen[index].correct.toLowerCase()){ 
+  // Kiểm tra đúng/sai
+  const isCorrect = userAns.toLowerCase() === chosen[index].correct.toLowerCase();
+
+  // Roast vui & buồn
+  const goodRoasts = [
+    "Giỏi quá trời luôn 😎",
+    "Xịn xò thực sự 😆",
+    "Đỉnh kout luôn á 👑",
+    "Trời ơi thông minh dữ vậy 😍",
+    "Chuẩn không cần chỉnh luôn ✨"
+  ];
+
+  const badRoasts = [
+    "Trời ơi… sai mất rồi buồn ghê 😭",
+    "Sai rồi, buồn nhẹ luôn 😢",
+    "Câu này đi hơi lốp nha 😔",
+    "Sai mất tiêu rồi… tiếc ghê 😥",
+    "Ơ… tiêu thật rồi 😟"
+  ];
+
+  let feedback = "";
+
+  if(isCorrect){
     score++;
-    feedback = roastText.replace(/Bạn/g, pronoun);
+    const roastVui = goodRoasts[Math.floor(Math.random()*goodRoasts.length)];
+    feedback = roastVui.replace(/Bạn/g, pronoun);
+  } else {
+    const roastBuon = badRoasts[Math.floor(Math.random()*badRoasts.length)];
+    feedback = roastBuon.replace(/Bạn/g, pronoun) + ` (Đáp án đúng: ${chosen[index].correct})`;
   }
-  
-  document.getElementById('roast').innerText=feedback;
+
+  document.getElementById('roast').innerText = feedback;
   index++;
   setTimeout(loadQuestion,1200);
 }
@@ -219,7 +230,7 @@ function submitAnswer(){
 function endGame(){
   document.getElementById('quiz').style.display='none';
   document.getElementById('result').style.display='flex';
-  createPetals('resultPetals'); // cánh hoa kết quả
+  createPetals('resultPetals');
   const finalRoast=endRoasts.sort(()=>0.5-Math.random()).slice(0,2).join(' ');
   document.getElementById('finalText').innerText=`${playerName}, bạn đúng ${score}/10! ${finalRoast}`;
 }
