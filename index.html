@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cơm nước gì chưa người đẹp</title>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B56CSRG31S"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-B56CSRG31S');
+</script>
+
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Arial', sans-serif; overflow:hidden; }
@@ -37,6 +47,7 @@ img { max-width:200px; border-radius:10px; margin-bottom:10px; }
 </style>
 </head>
 <body>
+
 <div id="intro">
   <div class="tulip-bg"></div>
   <div class="petals" id="petals"></div>
@@ -177,12 +188,12 @@ function loadQuestion(){
   document.getElementById('answerInput').focus();
 }
 
-// **Hàm submitAnswer() mới**
+// Gửi đáp án
 function submitAnswer(){
   const userAns=document.getElementById('answerInput').value.trim();
   if(!userAns){ alert("Vui lòng nhập đáp án!"); return; }
 
-  // Lấy đại từ nhân xưng
+  // Đại từ nhân xưng
   const birthYear = new Date(document.getElementById('dob').value).getFullYear();
   const gender = document.getElementById('gender').value;
   let pronoun = '';
@@ -190,45 +201,39 @@ function submitAnswer(){
   else if(birthYear === 2007) pronoun = 'Cậu';
   else pronoun = 'Em';
 
-  let previousScore = score;  
-  const isCorrect = userAns.toLowerCase() === chosen[index].correct.toLowerCase();
+  const q = chosen[index];
+  const isCorrect = userAns.toLowerCase() === q.correct.toLowerCase();
 
-  // Nếu đúng → +1 điểm
+  const goodRoasts = [
+    "Giỏi quá trời luôn 😎",
+    "Xịn xò thực sự 😆",
+    "Đỉnh kout luôn á 👑",
+    "Trời ơi thông minh dữ vậy 😍",
+    "Chuẩn không cần chỉnh luôn ✨"
+  ];
+
+  const badRoasts = [
+    "Trời ơi… sai mất rồi buồn ghê 😭",
+    "Sai rồi, buồn nhẹ luôn 😢",
+    "Câu này đi hơi lốp nha 😔",
+    "Sai mất tiêu rồi… tiếc ghê 😥",
+    "Ơ… tiêu thật rồi 😟"
+  ];
+
+  let feedback = "";
+
   if(isCorrect){
     score++;
-  }
-
-  // Roast
-  const roastDung = [
-    "Giỏi quá trời luôn!",
-    "Đỉnh cao trí tuệ rồi đó!",
-    "Ghê vậy trời, thông minh dữ!",
-    "Xuất sắc luôn nhaaa!",
-    "Chuẩn không cần chỉnh!"
-  ];
-
-  const roastSai = [
-    "Sai rồi nè… 😭",
-    "Không được cộng điểm rồi nhaaaa.",
-    "Hí hí… lần này mlem không cứu nổi đâu.",
-    "Lụm trái đắng rồi đó.",
-    "Thua câu này nhẹ nhàng ha…"
-  ];
-
-  // Kiểm tra score có tăng hay không
-  let feedback = "";
-  if(score > previousScore){
-    feedback = roastDung[Math.floor(Math.random()*roastDung.length)];
+    const roastVui = goodRoasts[Math.floor(Math.random()*goodRoasts.length)];
+    feedback = roastVui.replace(/Bạn/g, pronoun);
   } else {
-    feedback = roastSai[Math.floor(Math.random()*roastSai.length)];
+    const roastBuon = badRoasts[Math.floor(Math.random()*badRoasts.length)];
+    feedback = roastBuon.replace(/Bạn/g, pronoun) + ` (Đáp án đúng: ${q.correct})`;
   }
-
-  feedback = feedback.replace(/Bạn/g, pronoun);
 
   document.getElementById('roast').innerText = feedback;
-
   index++;
-  setTimeout(loadQuestion, 1200);
+  setTimeout(loadQuestion,1200);
 }
 
 // Kết thúc
@@ -238,9 +243,8 @@ function endGame(){
   createPetals('resultPetals');
   const finalRoast=endRoasts.sort(()=>0.5-Math.random()).slice(0,2).join(' ');
   document.getElementById('finalText').innerText=`${playerName}, bạn đúng ${score}/10! ${finalRoast}`;
-}
 
-function reload(){ location.reload(); }
-</script>
-</body>
-</html>
+  // Gửi event lên GA
+  gtag('event', 'quiz_end', {
+    'player_name': playerName,
+    '
