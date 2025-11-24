@@ -3,43 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cơm nước gì chưa người đẹp</title>
+<title>Cơm nước gì chưa người đẹp - Full Quiz</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Arial', sans-serif; overflow:hidden; background:#222; color:#fff; }
-
-#intro { position:relative; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
-.tulip-bg { position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ff6b6b" d="M50 20 C60 10, 80 15, 80 30 C80 45, 60 50, 50 60 C40 50, 20 45, 20 30 C20 15, 40 10, 50 20 Z"/><path fill="%23ff8e8e" d="M50 60 L45 80 L55 80 Z"/></svg>'); background-size:200px; background-position:center; z-index:-1; filter:blur(2px); }
-.petals { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2; }
+body { font-family:'Arial', sans-serif; overflow:hidden; background:#111; color:#fff; }
+#intro, #quiz, #result { position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; height:100vh; padding:20px; }
+.tulip-bg, #petals, #resultPetals { position:absolute; top:0; left:0; width:100%; height:100%; z-index:-1; }
+.tulip-bg { background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ff6b6b" d="M50 20 C60 10, 80 15, 80 30 C80 45, 60 50, 50 60 C40 50, 20 45, 20 30 C20 15, 40 10, 50 20 Z"/><path fill="%23ff8e8e" d="M50 60 L45 80 L55 80 Z"/></svg>'); background-size:200px; background-position:center; filter:blur(2px); }
 .petal { position:absolute; border-radius:50% 0 50% 50%; transform:rotate(45deg); animation:fall linear forwards; }
 @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
-
 .neon { font-size:60px; margin-bottom:20px; text-shadow:0 0 5px #ff88ff,0 0 10px #ff88ff,0 0 20px #ff88ff,0 0 40px #ff00ff; animation:flicker 1.5s infinite alternate; color:#fff; }
 @keyframes flicker { 0%,19%,21%,23%,25%,54%,56%,100% { opacity:1; text-shadow:0 0 5px #ff88ff,0 0 10px #ff88ff,0 0 20px #ff88ff,0 0 40px #ff00ff; } 20%,22%,24%,55% { opacity:0.8; text-shadow:0 0 2px #ff88ff,0 0 5px #ff88ff,0 0 10px #ff88ff,0 0 20px #ff00ff; } }
 .subtitle { font-size:24px; margin-bottom:40px; color:#ffd700; text-shadow:0 0 10px rgba(255,215,0,0.5); }
-
 .form-box input, .form-box select { padding:10px; font-size:18px; margin:5px; border-radius:8px; }
 .start-btn { padding:18px 50px; font-size:24px; border:none; border-radius:50px; cursor:pointer; background:linear-gradient(45deg,#ff8e53,#ff6b6b,#ff8e8e); color:#fff; box-shadow:0 0 20px rgba(255,107,107,0.7); transition: transform 0.3s, box-shadow 0.3s; font-weight:bold; letter-spacing:1px; }
 .start-btn:hover { transform:scale(1.1); box-shadow:0 0 30px rgba(255,107,107,0.9); }
-
 .music-control { position:absolute; bottom:20px; right:20px; background:rgba(255,255,255,0.2); border-radius:50%; width:50px; height:50px; display:flex; justify-content:center; align-items:center; cursor:pointer; backdrop-filter:blur(5px); border:1px solid rgba(255,255,255,0.3); }
-
-#quiz, #result { display:none; flex-direction:column; justify-content:center; align-items:center; text-align:center; min-height:100vh; padding:30px; }
-.question { font-size:28px; margin-bottom:15px; color:#ffd700; }
 #answerInput { padding:10px; font-size:18px; margin:10px; border-radius:8px; width:300px; }
 #roast { margin-top:15px; font-size:18px; color:#ffb6c1; min-height:24px; }
 .score { margin-top:20px; font-size:20px; color:#ff8e8e; }
 img { max-width:200px; border-radius:10px; margin-bottom:10px; }
-
-#result { background: linear-gradient(to bottom,#ffb6c1,#ffc0cb); position:relative; overflow:hidden; }
+#result { background: linear-gradient(to bottom,#ffb6c1,#ffc0cb); overflow:hidden; }
 </style>
 </head>
 <body>
+
 <div id="intro">
   <div class="tulip-bg"></div>
   <div class="petals" id="petals"></div>
   <h1 class="neon">🌷 Cơm nước gì chưa người đẹp 🌷</h1>
-  <p class="subtitle">Thử thách 10 câu hỏi siu zui nhộn hoặc không vui vẻ lắm kaka</p>
+  <p class="subtitle">Thử thách 10 câu hỏi ngẫu nhiên trong bộ đề 50 câu!</p>
   <div class="form-box" id="playerForm">
     <input type="text" id="name" placeholder="Nhập tên của bạn">
     <input type="date" id="dob">
@@ -98,11 +91,14 @@ createPetals('petals');
 function playMusic(){ const m=document.getElementById('introMusic'); m.volume=0.5; m.play().catch(()=>{}); }
 function toggleMusic(){ const m=document.getElementById('introMusic'); const icon=document.querySelector('.music-icon'); if(m.paused){ m.play(); icon.textContent='🎵'; }else{ m.pause(); icon.textContent='🔇'; } }
 
-// Roast
-const endRoasts=["Wow, bạn vừa trải qua 10 câu thử thách thật tuyệt!","Có vẻ như bạn đang luyện tập để trở thành quiz master!","Chúc mừng! Đối với tớ bạn đã rất tuyệt rồi!"];
-
-// 50 câu hỏi (lấy từ dữ liệu bạn gửi)
-let allQuestions = [
+// Bộ đề 50 câu
+let allQuestions=[
+  { type:'order', text:'Sắp xếp để từ sau có nghĩa: c/ọ/n/ồ/l', correct:'lọ cồn' },
+  { type:'order', text:'Buổi nhậu sẽ hoàn hảo hơn nếu có cái gì :ó/c/c/á/l/i/ồ/n ', correct:'nồi cá lóc' },
+  { type:'order', text:'Tên 1 loại cá: l/á/ó/c/c', correct:'cá lóc' },
+  { type:'order', text:'Khi về quê ta sẽ thấy được:h/à/g/n/x/ó/l/m/ồ/n', correct:'hồn xóm làng' },
+  { type:'order', text:'Tên một loại đồ uống: p/à/c/ê/h', correct:'cà phê' },
+  { type:'order', text:'Một món ăn vặt nổi tiếng: n/á/h/b/m/ì/c/ả/h', correct:'bánh mì chả' },
   { type:'idiom', text:'Có công mài __ có ngày nên kim', correct:'sắt' },
   { type:'idiom', text:'Đi một ngày đàng học một __', correct:'sàng khôn' },
   { type:'idiom', text:'Nước chảy đá __', correct:'mòn' },
@@ -135,7 +131,6 @@ let allQuestions = [
   { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Trung Quốc', img:'https://upload.wikimedia.org/wikipedia/commons/f/f3/Flag_of_the_People%27s_Republic_of_China.svg' },
   { type:'idiom', text:'Thời gian là __', correct:'vàng' },
   { type:'idiom', text:'Cá không ăn __ cá ươn', correct:'mồi' },
-  { type:'idiom', text:'Gần mực thì __', correct:'đen' },
   { type:'idiom', text:'Khéo ăn thì no, khéo co thì __', correct:'ấm' },
   { type:'idiom', text:'Học thầy không tày học __', correct:'bạn' },
   { type:'order', text:'Món ăn vặt nổi tiếng: p/p/o/c/o/r/n', correct:'popcorn' },
@@ -144,60 +139,61 @@ let allQuestions = [
   { type:'order', text:'Một loại trái cây: t/s/r/b/w/a/r/e/r/y', correct:'strawberry' },
   { type:'order', text:'Một loại nước uống: a/e/t', correct:'tea' },
   { type:'order', text:'Một loại nước uống: c/e/f/o/f/e', correct:'coffee' },
-  { type:'order', text:'Một loại bánh: p/e/i', correct:'pie' },
-  { type:'order', text:'Sắp xếp để từ sau có nghĩa: c/ọ/n/ồ/l', correct:'lọ cồn' },
-  { type:'order', text:'Buổi nhậu sẽ hoàn hảo hơn nếu có cái gì :ó/c/c/á/l/i/ồ/n ', correct:'nồi cá lóc' },
-  { type:'order', text:'Tên 1 loại cá: l/á/ó/c/c', correct:'cá lóc' },
-  { type:'order', text:'Khi về quê ta sẽ thấy được:h/à/g/n/x/ó/l/m/ồ/n', correct:'hồn xóm làng' },
-  { type:'order', text:'Tên một loại đồ uống: p/à/c/ê/h', correct:'cà phê' },
-  { type:'order', text:'Một món ăn vặt nổi tiếng: n/á/h/b/m/ì/c/ả/h', correct:'bánh mì chả' }
+  { type:'order', text:'Một loại bánh: p/e/i', correct:'pie' }
+  // ... thêm các câu khác nếu cần
 ];
 
-// Biến toàn cục
-let chosen=[], index=0, score=0, playerName='', age=0;
+let chosen=[], index=0, score=0, playerName='';
+const goodRoasts = ["Giỏi quá trời luôn 😎","Xịn xò thực sự 😆","Đỉnh kout luôn á 👑","Trời ơi thông minh dữ vậy 😍","Chuẩn không cần chỉnh luôn ✨"];
+const badRoasts = ["Trời ơi… sai mất rồi buồn ghê 😭","Sai rồi, buồn nhẹ luôn 😢","Câu này đi hơi lốp nha 😔","Sai mất tiêu rồi… tiếc ghê 😥","Ơ… tiêu thật rồi 😟"];
+const endRoasts=["Wow, bạn vừa trải qua 10 câu thử thách thật tuyệt!","Có vẻ như bạn đang luyện tập để trở thành quiz master!","Chúc mừng! Đối với tớ bạn đã rất tuyệt rồi!"];
 
-// Bắt đầu game
+// Start
 function startGame(){
   const n=document.getElementById('name').value.trim();
   const d=document.getElementById('dob').value.trim();
   const g=document.getElementById('gender').value.trim();
   if(!n||!d||!g){ alert('Vui lòng nhập đầy đủ thông tin!'); return; }
   playerName=n;
-  age=new Date().getFullYear()-new Date(d).getFullYear();
   document.getElementById('intro').style.display='none';
   document.getElementById('quiz').style.display='flex';
   playMusic();
-
-  const fixedQuestions=allQuestions.filter(q=>q.correct==='nồi cá lóc'||q.correct==='hồn xóm làng');
-  const otherQuestions=allQuestions.filter(q=>q.correct!=='nồi cá lóc'&&q.correct!=='hồn xóm làng');
-  otherQuestions.sort(()=>Math.random()-0.5);
-  chosen=fixedQuestions.concat(otherQuestions.slice(0,8));
-  index=0;
-  score=0;
-  showQuestion();
+  chosen=allQuestions.sort(()=>Math.random()-0.5).slice(0,10);
+  index=0; score=0;
+  loadQuestion();
 }
 
-// Roast vui
-function getRoast(correct){
-  let gRoast;
-  const g=document.getElementById('gender').value;
-  if(g==="Nam") gRoast=["Cậu trai siêu đỉnh 😎","Đỉnh kout luôn á 👑"][Math.floor(Math.random()*2)];
-  else if(g==="Nữ") gRoast=["Cô gái xinh xắn 😍","Xịn xò thực sự ✨"][Math.floor(Math.random()*2)];
-  else gRoast=["Bạn quá chất 😎","Cực kute luôn 😆"][Math.floor(Math.random()*2)];
-
-  let aRoast;
-  if(age<18) aRoast="Nhóc con thông minh ghê 😏";
-  else if(age<=30) aRoast="Bạn trẻ tài năng 😎";
-  else aRoast="Người lớn khôn ngoan 🤓";
-
-  return correct ? `${gRoast}, đúng rồi! ${aRoast}` : `${gRoast}, tiếc là sai 😢 ${aRoast}`;
-}
-
-// Hiển thị câu hỏi
-function showQuestion(){
-  if(index>=chosen.length){ showResult(); return; }
+// Load question
+function loadQuestion(){
+  if(index>=chosen.length){ endGame(); return; }
   const q=chosen[index];
-  document.getElementById('hello').textContent=`Chào ${playerName}! Câu hỏi ${index+1} / ${chosen.length}`;
-  document.getElementById('question').textContent=q.text;
-  const img=document.getElementById('questionImg');
-  if(q.img){ img.src=q.img; img.style.display='block'; } else img.style
+  document.getElementById('hello').innerText=`Chào ${playerName}! Câu ${index+1}/10`;
+  document.getElementById('question').innerText=q.text;
+  const imgEl=document.getElementById('questionImg');
+  if(q.img){ imgEl.src=q.img; imgEl.style.display='block'; } else { imgEl.style.display='none'; }
+  document.getElementById('score').innerText=`Điểm: ${score}/${chosen.length}`;
+  document.getElementById('roast').innerText='';
+  document.getElementById('answerInput').value='';
+  document.getElementById('answerInput').focus();
+}
+
+// Submit
+function normalize(str){ return str.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim(); }
+
+function submitAnswer(){
+  const userAns=document.getElementById('answerInput').value.trim();
+  if(!userAns){ alert("Vui lòng nhập đáp án!"); return; }
+
+  const birthYear = new Date(document.getElementById('dob').value).getFullYear();
+  const gender = document.getElementById('gender').value;
+  let pronoun = '';
+  if(birthYear > 2007 && gender==='Nữ') pronoun = 'Chị';
+  else if(birthYear === 2007) pronoun = 'Cậu';
+  else pronoun = 'Em';
+
+  const isCorrect = normalize(userAns) === normalize(chosen[index].correct);
+  let feedback = "";
+
+  if(isCorrect){
+    score++;
+    const roastVui = goodRo
