@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz Hài Hước 30 Câu</title>
+<title>Quiz hài hước </title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Arial', sans-serif; overflow:hidden; }
@@ -28,7 +28,7 @@ body { font-family:'Arial', sans-serif; overflow:hidden; }
 #quiz, #result { display:none; flex-direction:column; justify-content:center; align-items:center; text-align:center; min-height:100vh; padding:30px; }
 .question { font-size:28px; margin-bottom:15px; color:#ffd700; }
 #answerInput { padding:10px; font-size:18px; margin:10px; border-radius:8px; width:300px; }
-#roast { margin-top:15px; font-size:18px; color:#ffb6c1; min-height:24px; }
+#roast { margin-top:15px; font-size:18px; min-height:24px; font-weight:bold; }
 .score { margin-top:20px; font-size:20px; color:#ff8e8e; }
 img { max-width:200px; border-radius:10px; margin-bottom:10px; }
 
@@ -40,8 +40,8 @@ img { max-width:200px; border-radius:10px; margin-bottom:10px; }
 <div id="intro">
   <div class="tulip-bg"></div>
   <div class="petals" id="petals"></div>
-  <h1 class="neon">🌷 Quiz Hài Hước 🌷</h1>
-  <p class="subtitle">Thử thách 30 câu hỏi siêu vui nhộn!</p>
+  <h1 class="neon">🌷 Cơm cháo gì chưa người đẹp 🌷</h1>
+  <p class="subtitle">Thử thách 10 câu hỏi siêu vui nhộn!</p>
   <div class="form-box" id="playerForm">
     <input type="text" id="name" placeholder="Nhập tên của bạn">
     <input type="date" id="dob">
@@ -100,21 +100,37 @@ createPetals('petals'); // intro petals
 function playMusic(){ const m=document.getElementById('introMusic'); m.volume=0.5; m.play().catch(()=>console.log('Cần tương tác để phát nhạc')); }
 function toggleMusic(){ const m=document.getElementById('introMusic'); const icon=document.querySelector('.music-icon'); if(m.paused){ m.play(); icon.textContent='🎵'; }else{ m.pause(); icon.textContent='🔇'; } }
 
-// Roast
-const roasts=[
-  "Ồ, đúng rồi! Bạn thông minh hoặc may mắn 😎",
-  "Sai rồi! May mà câu sau còn cơ hội 😏",
-  "Đúng rồi! Bạn như quiz master vậy 😎",
-  "Sai rồi! Trí nhớ của bạn đang ngủ à? 😂",
-  "Chính xác! Bạn giỏi hơn tôi tưởng đấy 😆",
-  "Sai rồi! Hơi tệ, nhưng đừng buồn 😜",
-  "Đúng rồi! Bạn sắp thành thánh quiz 😏",
-  "Sai rồi! Cẩn thận nhé, lần sau tôi nháy mắt 😎"
+// ROAST PHÂN BIỆT ĐÚNG/SAI
+const correctRoasts = [
+  "🎉 Chính xác! Bạn quá đỉnh!",
+  "🌟 Tuyệt vời! Trí tuệ siêu phàm!",
+  "💫 Đúng rồi! Bạn thông minh hơn tôi nghĩ!",
+  "🔥 Quá chuẩn! Não bạn như CPU vậy!",
+  "🚀 Perfect! Bạn đang trên đỉnh Olympia!",
+  "😎 Chuẩn không cần chỉnh! Pro quiz!",
+  "🌈 Brilliant! Câu trả lời hoàn hảo!",
+  "⭐ Xuất sắc! Bạn là bậc thầy kiến thức!",
+  "💯 100 điểm! Không gì có thể làm khó bạn!",
+  "🎯 Trúng phóc! Phong độ quá ổn định!"
 ];
+
+const wrongRoasts = [
+  "💔 Sai rồi! Hơi buồn nhưng không sao!",
+  "😅 Ôi không! Lần sau cẩn thận hơn nhé!",
+  "🌧️ Tiếc quá! Câu này hơi khoai nhỉ?",
+  "🤔 Hmm... chưa đúng rồi, cố lên!",
+  "📉 Úi giời! Sai mất rồi!",
+  "😴 Hình như bạn đang mơ ngủ?",
+  "🌀 Rất tiếc! Thử lại câu sau nhé!",
+  "❌ Chưa đúng! Đáp án đúng là: ",
+  "🤦‍♂️ Ái chà! Lỡ tay rồi!",
+  "📚 Ôi! Cần ôn bài thêm chút!"
+];
+
 const endRoasts=[
-  "Wow, bạn vừa trải qua 10 câu thử thách mà vẫn tươi rói 😎",
-  "Cứ như bạn đang luyện tập để trở thành quiz master 😂",
-  "Chúc mừng! Không biết may hay tài năng 😏"
+  "Wow, bạn vừa trải qua 10 câu thử thách mà vẫn tươi rói !Người đâu mà vừa xinh còn vừa giỏi nữa 😎",
+  "Cứ như bạn đang luyện tập để tốt hơn !Đối với tớ bạn đã rất tuyệt rồi 😂",
+  "Chúc mừng! Không biết may hay tài năng "
 ];
 
 // 30 câu
@@ -195,6 +211,7 @@ function loadQuestion(){
   if(q.img){ imgEl.src=q.img; imgEl.style.display='block'; } else { imgEl.style.display='none'; }
   document.getElementById('score').innerText=`Điểm: ${score}/${chosen.length}`;
   document.getElementById('roast').innerText='';
+  document.getElementById('roast').style.color = ''; // Reset màu
   document.getElementById('answerInput').value='';
   document.getElementById('answerInput').focus();
 }
@@ -204,27 +221,27 @@ function submitAnswer(){
   const userAns=document.getElementById('answerInput').value.trim();
   if(!userAns){ alert("Vui lòng nhập đáp án!"); return; }
 
-  // Đại từ nhân xưng
-  const birthYear = new Date(document.getElementById('dob').value).getFullYear();
-  const gender = document.getElementById('gender').value;
-  let pronoun = '';
-  if(birthYear > 2007 && gender==='Nữ') pronoun = 'Chị';
-  else if(birthYear === 2007) pronoun = 'Cậu';
-  else pronoun = 'Em';
-
-  // Chọn roast ngẫu nhiên
-  const roastText=roasts[Math.floor(Math.random()*roasts.length)];
+  const roastEl = document.getElementById('roast');
+  let feedback = '';
   
-  // Thay "Bạn" bằng đại từ nhân xưng
-  let feedback = roastText.replace(/Bạn/g, pronoun) + `, đáp án đúng: ${chosen[index].correct}`;
-  if(userAns.toLowerCase()===chosen[index].correct.toLowerCase()){ 
+  if(userAns.toLowerCase() === chosen[index].correct.toLowerCase()){ 
     score++;
-    feedback = roastText.replace(/Bạn/g, pronoun);
+    // Roast vui khi đúng
+    const randomRoast = correctRoasts[Math.floor(Math.random() * correctRoasts.length)];
+    feedback = randomRoast;
+    roastEl.style.color = '#00ff00'; // Màu xanh cho đúng
+    roastEl.style.textShadow = '0 0 10px rgba(0,255,0,0.5)';
+  } else { 
+    // Roast buồn khi sai
+    const randomRoast = wrongRoasts[Math.floor(Math.random() * wrongRoasts.length)];
+    feedback = randomRoast + ` Đáp án đúng: ${chosen[index].correct}`;
+    roastEl.style.color = '#ff4444'; // Màu đỏ cho sai
+    roastEl.style.textShadow = '0 0 10px rgba(255,0,0,0.3)';
   }
   
-  document.getElementById('roast').innerText=feedback;
+  roastEl.innerText = feedback;
   index++;
-  setTimeout(loadQuestion,1200);
+  setTimeout(loadQuestion, 1500);
 }
 
 // Kết thúc
@@ -237,6 +254,13 @@ function endGame(){
 }
 
 function reload(){ location.reload(); }
+
+// Thêm tính năng bấm Enter để gửi đáp án
+document.getElementById('answerInput').addEventListener('keypress', function(e) {
+  if(e.key === 'Enter') {
+    submitAnswer();
+  }
+});
 </script>
 </body>
 </html>
