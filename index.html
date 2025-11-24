@@ -6,9 +6,8 @@
 <title>Cơm nước gì chưa người đẹp</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Arial', sans-serif; overflow:hidden; }
+body { font-family:'Arial', sans-serif; overflow:hidden; background:#222; color:#fff; }
 
-/* Intro */
 #intro { position:relative; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; }
 .tulip-bg { position:absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23ff6b6b" d="M50 20 C60 10, 80 15, 80 30 C80 45, 60 50, 50 60 C40 50, 20 45, 20 30 C20 15, 40 10, 50 20 Z"/><path fill="%23ff8e8e" d="M50 60 L45 80 L55 80 Z"/></svg>'); background-size:200px; background-position:center; z-index:-1; filter:blur(2px); }
 .petals { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:2; }
@@ -32,7 +31,6 @@ body { font-family:'Arial', sans-serif; overflow:hidden; }
 .score { margin-top:20px; font-size:20px; color:#ff8e8e; }
 img { max-width:200px; border-radius:10px; margin-bottom:10px; }
 
-/* Result hồng */
 #result { background: linear-gradient(to bottom,#ffb6c1,#ffc0cb); position:relative; overflow:hidden; }
 </style>
 </head>
@@ -103,14 +101,8 @@ function toggleMusic(){ const m=document.getElementById('introMusic'); const ico
 // Roast
 const endRoasts=["Wow, bạn vừa trải qua 10 câu thử thách thật tuyệt!","Có vẻ như bạn đang luyện tập để trở thành quiz master!","Chúc mừng! Đối với tớ bạn đã rất tuyệt rồi!"];
 
-// Câu hỏi mẫu (thêm tất cả câu bạn muốn)
-let allQuestions=[
-  { type:'order', text:'Sắp xếp để từ sau có nghĩa: c/ọ/n/ồ/l', correct:'lọ cồn' },
-  { type:'order', text:'Buổi nhậu sẽ hoàn hảo hơn nếu có cái gì :ó/c/c/á/l/i/ồ/n ', correct:'nồi cá lóc' },
-  { type:'order', text:'Tên 1 loại cá: l/á/ó/c/c', correct:'cá lóc' },
-  { type:'order', text:'Khi về quê ta sẽ thấy được:h/à/g/n/x/ó/l/m/ồ/n', correct:'hồn xóm làng' },
-  { type:'order', text:'Tên một loại đồ uống: p/à/c/ê/h', correct:'cà phê' },
-  { type:'order', text:'Một món ăn vặt nổi tiếng: n/á/h/b/m/ì/c/ả/h', correct:'bánh mì chả' },
+// 50 câu hỏi (lấy từ dữ liệu bạn gửi)
+let allQuestions = [
   { type:'idiom', text:'Có công mài __ có ngày nên kim', correct:'sắt' },
   { type:'idiom', text:'Đi một ngày đàng học một __', correct:'sàng khôn' },
   { type:'idiom', text:'Nước chảy đá __', correct:'mòn' },
@@ -120,23 +112,58 @@ let allQuestions=[
   { type:'idiom', text:'Chín người mười ý __', correct:'khác nhau' },
   { type:'idiom', text:'Lưỡi không xương __', correct:'uốn nhiều' },
   { type:'idiom', text:'Nước lên thì __', correct:'thuyền lên' },
-  { type:'idiom', text:'Có tật giật mình __', correct:'hay sợ hãi' }
+  { type:'idiom', text:'Có tật giật mình __', correct:'hay sợ hãi' },
+  { type:'capital', text:'Thủ đô của Việt Nam là?', correct:'Hà Nội' },
+  { type:'capital', text:'Thủ đô của Nhật Bản là?', correct:'Tokyo' },
+  { type:'capital', text:'Thủ đô của Nga là?', correct:'Moscow' },
+  { type:'capital', text:'Thủ đô của Hàn Quốc là?', correct:'Seoul' },
+  { type:'capital', text:'Thủ đô của Ấn Độ là?', correct:'New Delhi' },
+  { type:'capital', text:'Thủ đô của Pháp là?', correct:'Paris' },
+  { type:'capital', text:'Thủ đô của Mỹ là?', correct:'Washington D.C.' },
+  { type:'capital', text:'Thủ đô của Anh là?', correct:'London' },
+  { type:'capital', text:'Thủ đô của Đức là?', correct:'Berlin' },
+  { type:'capital', text:'Thủ đô của Trung Quốc là?', correct:'Bắc Kinh' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Việt Nam', img:'https://upload.wikimedia.org/wikipedia/vi/2/21/Flag_of_Vietnam.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Nhật Bản', img:'https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Nga', img:'https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Hàn Quốc', img:'https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Ấn Độ', img:'https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Pháp', img:'https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Mỹ', img:'https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Anh', img:'https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Đức', img:'https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg' },
+  { type:'flag', text:'Quốc gia có lá cờ này?', correct:'Trung Quốc', img:'https://upload.wikimedia.org/wikipedia/commons/f/f3/Flag_of_the_People%27s_Republic_of_China.svg' },
+  { type:'idiom', text:'Thời gian là __', correct:'vàng' },
+  { type:'idiom', text:'Cá không ăn __ cá ươn', correct:'mồi' },
+  { type:'idiom', text:'Gần mực thì __', correct:'đen' },
+  { type:'idiom', text:'Khéo ăn thì no, khéo co thì __', correct:'ấm' },
+  { type:'idiom', text:'Học thầy không tày học __', correct:'bạn' },
+  { type:'order', text:'Món ăn vặt nổi tiếng: p/p/o/c/o/r/n', correct:'popcorn' },
+  { type:'order', text:'Một loại hạt: a/l/m/o/d/n', correct:'almond' },
+  { type:'order', text:'Món tráng miệng: i/e/c c/e/r/a/m', correct:'ice cream' },
+  { type:'order', text:'Một loại trái cây: t/s/r/b/w/a/r/e/r/y', correct:'strawberry' },
+  { type:'order', text:'Một loại nước uống: a/e/t', correct:'tea' },
+  { type:'order', text:'Một loại nước uống: c/e/f/o/f/e', correct:'coffee' },
+  { type:'order', text:'Một loại bánh: p/e/i', correct:'pie' },
+  { type:'order', text:'Sắp xếp để từ sau có nghĩa: c/ọ/n/ồ/l', correct:'lọ cồn' },
+  { type:'order', text:'Buổi nhậu sẽ hoàn hảo hơn nếu có cái gì :ó/c/c/á/l/i/ồ/n ', correct:'nồi cá lóc' },
+  { type:'order', text:'Tên 1 loại cá: l/á/ó/c/c', correct:'cá lóc' },
+  { type:'order', text:'Khi về quê ta sẽ thấy được:h/à/g/n/x/ó/l/m/ồ/n', correct:'hồn xóm làng' },
+  { type:'order', text:'Tên một loại đồ uống: p/à/c/ê/h', correct:'cà phê' },
+  { type:'order', text:'Một món ăn vặt nổi tiếng: n/á/h/b/m/ì/c/ả/h', correct:'bánh mì chả' }
 ];
 
 // Biến toàn cục
 let chosen=[], index=0, score=0, playerName='', age=0;
 
-// Bắt đầu quiz
+// Bắt đầu game
 function startGame(){
   const n=document.getElementById('name').value.trim();
   const d=document.getElementById('dob').value.trim();
   const g=document.getElementById('gender').value.trim();
   if(!n||!d||!g){ alert('Vui lòng nhập đầy đủ thông tin!'); return; }
-
   playerName=n;
-  const birthYear=new Date(d).getFullYear();
-  age=new Date().getFullYear()-birthYear;
-
+  age=new Date().getFullYear()-new Date(d).getFullYear();
   document.getElementById('intro').style.display='none';
   document.getElementById('quiz').style.display='flex';
   playMusic();
@@ -150,20 +177,20 @@ function startGame(){
   showQuestion();
 }
 
-// Roast cá nhân
+// Roast vui
 function getRoast(correct){
-  let genderRoast;
+  let gRoast;
   const g=document.getElementById('gender').value;
-  if(g==="Nam") genderRoast=["Cậu trai siêu đỉnh 😎","Đỉnh kout luôn á 👑"][Math.floor(Math.random()*2)];
-  else if(g==="Nữ") genderRoast=["Cô gái xinh xắn 😍","Xịn xò thực sự ✨"][Math.floor(Math.random()*2)];
-  else genderRoast=["Bạn quá chất 😎","Cực kute luôn 😆"][Math.floor(Math.random()*2)];
+  if(g==="Nam") gRoast=["Cậu trai siêu đỉnh 😎","Đỉnh kout luôn á 👑"][Math.floor(Math.random()*2)];
+  else if(g==="Nữ") gRoast=["Cô gái xinh xắn 😍","Xịn xò thực sự ✨"][Math.floor(Math.random()*2)];
+  else gRoast=["Bạn quá chất 😎","Cực kute luôn 😆"][Math.floor(Math.random()*2)];
 
-  let ageRoast;
-  if(age<18) ageRoast="Nhóc con thông minh ghê 😏";
-  else if(age<=30) ageRoast="Bạn trẻ tài năng 😎";
-  else ageRoast="Người lớn khôn ngoan 🤓";
+  let aRoast;
+  if(age<18) aRoast="Nhóc con thông minh ghê 😏";
+  else if(age<=30) aRoast="Bạn trẻ tài năng 😎";
+  else aRoast="Người lớn khôn ngoan 🤓";
 
-  return correct ? `${genderRoast}, đúng rồi! ${ageRoast}` : `${genderRoast}, tiếc là sai 😢 ${ageRoast}`;
+  return correct ? `${gRoast}, đúng rồi! ${aRoast}` : `${gRoast}, tiếc là sai 😢 ${aRoast}`;
 }
 
 // Hiển thị câu hỏi
@@ -173,35 +200,4 @@ function showQuestion(){
   document.getElementById('hello').textContent=`Chào ${playerName}! Câu hỏi ${index+1} / ${chosen.length}`;
   document.getElementById('question').textContent=q.text;
   const img=document.getElementById('questionImg');
-  if(q.img){ img.src=q.img; img.style.display='block'; } else img.style.display='none';
-  document.getElementById('answerInput').value='';
-  document.getElementById('roast').textContent='';
-  document.getElementById('score').textContent=`Điểm: ${score}`;
-}
-
-// Gửi đáp án
-function submitAnswer(){
-  const ans=document.getElementById('answerInput').value.trim().toLowerCase();
-  const correct=chosen[index].correct.toLowerCase();
-  const isCorrect=ans===correct;
-  if(isCorrect) score++;
-  document.getElementById('roast').textContent=getRoast(isCorrect);
-  document.getElementById('score').textContent=`Điểm: ${score}`;
-  index++;
-  setTimeout(showQuestion,1000);
-}
-
-// Kết quả
-function showResult(){
-  document.getElementById('quiz').style.display='none';
-  document.getElementById('result').style.display='flex';
-  document.getElementById('finalText').textContent=`${playerName}, bạn đã trả lời đúng ${score}/${chosen.length} câu!\n` 
-    + endRoasts[Math.floor(Math.random()*endRoasts.length)];
-  createPetals('resultPetals');
-}
-
-// Chơi lại
-function reload(){ location.reload(); }
-</script>
-</body>
-</html>
+  if(q.img){ img.src=q.img; img.style.display='block'; } else img.style
